@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC Builder Pro — Aprende a armar tu PC</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════ RESET & VARIABLES ═══════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-deep:#f5f6f8;--bg-card:#ffffff;--bg-card2:#f0f2f5;--bg-surface:#e8ebef;
+  --accent:#2563eb;--accent2:#3b82f6;--accent-glow:rgba(37,99,235,0.12);
+  --cyan:#0891b2;--green:#16a34a;--red:#dc2626;--amber:#d97706;--pink:#db2777;
+  --text:#1e293b;--text2:#475569;--text3:#94a3b8;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
+  --radius:10px;--radius-sm:8px;--radius-lg:14px;
+  --font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;
+  --shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg-deep);color:var(--text);line-height:1.6;min-height:100vh;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}
+button{font-family:var(--font);cursor:pointer;border:none;outline:none}
+input,select,textarea{font-family:var(--font);outline:none}
+img{max-width:100%;display:block;border-radius:var(--radius-sm)}
+::selection{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg-deep)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+/* ═══════════ UTILITY ═══════════ */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.flex-center{display:flex;align-items:center;justify-content:center}
+.flex-between{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}
+.mt-8{margin-top:8px}.mt-16{margin-top:16px}.mt-24{margin-top:24px}.mt-32{margin-top:32px}
+.mb-8{margin-bottom:8px}.mb-16{margin-bottom:16px}.mb-24{margin-bottom:24px}
+.text-center{text-align:center}
+.hidden{display:none!important}
+
+/* ═══════════ ANIMATIONS ═══════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--accent-glow)}50%{box-shadow:0 0 24px 8px var(--accent-glow)}}
+@keyframes slideRight{from{transform:translateX(-20px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes glow{0%,100%{opacity:0.5}50%{opacity:1}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.anim-fade{animation:fadeUp 0.6s ease both}
+.anim-fade-d1{animation:fadeUp 0.6s ease 0.1s both}
+.anim-fade-d2{animation:fadeUp 0.6s ease 0.2s both}
+.anim-fade-d3{animation:fadeUp 0.6s ease 0.3s both}
+
+/* ═══════════ BADGES & PILLS ═══════════ */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:0.3px}
+.badge-purple{background:rgba(108,92,231,0.15);color:#a78bfa}
+.badge-cyan{background:rgba(34,211,238,0.12);color:var(--cyan)}
+.badge-green{background:rgba(52,211,153,0.12);color:var(--green)}
+.badge-red{background:rgba(248,113,113,0.12);color:var(--red)}
+.badge-amber{background:rgba(251,191,36,0.12);color:var(--amber)}
+.badge-pink{background:rgba(244,114,182,0.12);color:var(--pink)}
+
+/* ═══════════ BUTTONS ═══════════ */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:var(--radius-sm);font-weight:600;font-size:14px;transition:all 0.3s;letter-spacing:0.2px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--accent-glow)}
+.btn-secondary{background:var(--bg-surface);color:var(--text);border:1px solid var(--border2)}
+.btn-secondary:hover{border-color:var(--accent);background:rgba(108,92,231,0.08)}
+.btn-danger{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
+.btn-danger:hover{background:rgba(248,113,113,0.2)}
+.btn-sm{padding:8px 16px;font-size:13px;border-radius:8px}
+.btn-icon{width:40px;height:40px;padding:0;border-radius:10px;justify-content:center;background:var(--bg-surface);color:var(--text2);border:1px solid var(--border)}
+.btn-icon:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ═══════════ CARDS ═══════════ */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;transition:all 0.35s}
+.card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow)}
+.card-img{width:100%;height:180px;object-fit:cover;border-radius:var(--radius-sm);margin-bottom:16px;background:var(--bg-surface)}
+.card-compact{padding:16px}
+
+/* ═══════════ FORM CONTROLS ═══════════ */
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:0.3px;text-transform:uppercase}
+.form-input,.form-select,.form-textarea{width:100%;padding:12px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-deep);color:var(--text);font-size:14px;transition:border 0.2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent)}
+.form-textarea{resize:vertical;min-height:80px}
+.form-error{border-color:var(--red)!important}
+.error-text{font-size:12px;color:var(--red);margin-top:4px}
+
+/* ═══════════ PROGRESS BAR ═══════════ */
+.progress-bar{height:8px;background:var(--bg-surface);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width 0.5s ease;background:linear-gradient(90deg,var(--accent),var(--cyan))}
+
+/* ═══════════ HEADER / NAV ═══════════ */
+.header{background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.header-inner{height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-0.5px}
+.logo-icon{width:36px;height:36px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px}
+.nav{display:flex;gap:2px;align-items:center}
+.nav-btn{padding:8px 14px;border-radius:8px;background:transparent;color:var(--text2);font-size:13px;font-weight:500;transition:all 0.2s;border:none;white-space:nowrap}
+.nav-btn:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.nav-btn.active{color:var(--accent);background:rgba(108,92,231,0.1);font-weight:600}
+.user-info{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff}
+.mobile-toggle{display:none;width:40px;height:40px;border-radius:8px;background:var(--bg-surface);align-items:center;justify-content:center;border:1px solid var(--border);color:var(--text)}
+
+/* ═══════════ SECTION HEADERS ═══════════ */
+.section-header{margin-bottom:28px}
+.section-title{font-size:28px;font-weight:800;letter-spacing:-0.5px;color:var(--text)}
+.section-subtitle{font-size:15px;color:var(--text2);margin-top:6px;max-width:600px}
+.category-title{font-size:20px;font-weight:700;color:var(--text);margin:32px 0 16px;display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.category-title:first-of-type{margin-top:0}
+
+/* ═══════════ MODAL ═══════════ */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px;animation:fadeIn 0.2s ease}
+.modal{background:var(--bg-card);border:1px solid var(--border2);border-radius:var(--radius-lg);max-width:640px;width:100%;max-height:88vh;overflow-y:auto;padding:32px;animation:fadeUp 0.3s ease}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.modal-title{font-size:22px;font-weight:700}
+.modal-close{width:36px;height:36px;border-radius:50%;background:var(--bg-surface);color:var(--text2);display:flex;align-items:center;justify-content:center;border:none;font-size:18px;transition:all 0.2s}
+.modal-close:hover{background:var(--red);color:#fff}
+
+/* ═══════════ COMPONENT DETAIL ═══════════ */
+.detail-img{width:100%;height:240px;object-fit:cover;border-radius:var(--radius);margin-bottom:20px;background:var(--bg-surface)}
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}
+.spec-item{padding:10px 14px;background:var(--bg-deep);border-radius:var(--radius-sm);border:1px solid var(--border)}
+.spec-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
+.spec-value{font-size:14px;font-weight:600;color:var(--text);margin-top:2px}
+.compat-box{padding:14px 16px;border-radius:var(--radius-sm);margin:12px 0;border-left:3px solid}
+.compat-warn{background:rgba(251,191,36,0.08);border-color:var(--amber)}
+.compat-ok{background:rgba(52,211,153,0.08);border-color:var(--green)}
+.compat-err{background:rgba(248,113,113,0.08);border-color:var(--red)}
+.compat-info{background:rgba(34,211,238,0.08);border-color:var(--cyan)}
+
+/* ═══════════ VIDEO LINK ═══════════ */
+.video-link{display:flex;align-items:center;gap:10px;padding:14px 18px;border-radius:var(--radius-sm);background:var(--red);color:#fff;font-weight:600;font-size:14px;transition:all 0.3s;text-decoration:none}
+.video-link:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(220,38,38,0.3)}
+
+/* ═══════════ ASSEMBLY STEP ═══════════ */
+.step-card{display:flex;gap:16px;align-items:flex-start;padding:20px;border-radius:var(--radius);background:var(--bg-card);border:1px solid var(--border);transition:all 0.3s;cursor:pointer}
+.step-card:hover{border-color:var(--border2)}
+.step-card.active{border-color:var(--accent);background:var(--bg-card2)}
+.step-card.completed{border-color:var(--green);opacity:0.8}
+.step-num{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0;border:2px solid var(--border);color:var(--text2);transition:all 0.3s}
+.step-card.active .step-num{border-color:var(--accent);background:var(--accent);color:#fff}
+.step-card.completed .step-num{border-color:var(--green);background:var(--green);color:#fff}
+
+/* ═══════════ QUIZ ═══════════ */
+.quiz-option{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--radius-sm);border:2px solid var(--border);background:var(--bg-deep);cursor:pointer;transition:all 0.25s;font-size:15px}
+.quiz-option:hover{border-color:var(--accent);background:rgba(108,92,231,0.05)}
+.quiz-option.correct{border-color:var(--green)!important;background:rgba(52,211,153,0.08)!important}
+.quiz-option.wrong{border-color:var(--red)!important;background:rgba(248,113,113,0.08)!important}
+.quiz-option.disabled{pointer-events:none}
+.quiz-letter{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;background:var(--bg-surface);color:var(--text2);flex-shrink:0;transition:all 0.25s}
+.quiz-option.correct .quiz-letter{background:var(--green);color:#fff}
+.quiz-option.wrong .quiz-letter{background:var(--red);color:#fff}
+
+/* ═══════════ STORE CARD ═══════════ */
+.store-verified{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--green);font-weight:600}
+.store-stars{display:inline-flex;gap:2px;color:var(--amber);font-size:14px}
+
+/* ═══════════ LOGIN ═══════════ */
+.login-wrapper{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg-deep);position:relative;overflow:hidden}
+.login-bg{position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;pointer-events:none}
+.login-bg::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,0.06),transparent);top:-200px;right:-100px}
+.login-bg::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(8,145,178,0.05),transparent);bottom:-100px;left:-50px}
+.login-card{max-width:440px;width:100%;position:relative;z-index:1}
+.login-tabs{display:flex;gap:0;background:var(--bg-deep);border-radius:var(--radius-sm);padding:3px;margin-bottom:28px;border:1px solid var(--border)}
+.login-tab{flex:1;padding:10px;border:none;border-radius:8px;font-weight:600;font-size:14px;transition:all 0.2s;background:transparent;color:var(--text3)}
+.login-tab.active{background:var(--bg-surface);color:var(--text)}
+
+/* ═══════════ HERO ═══════════ */
+.hero{padding:56px 0 40px;text-align:center;position:relative}
+.hero-title{font-size:clamp(32px,5vw,48px);font-weight:900;letter-spacing:-1px;line-height:1.1;margin-bottom:16px}
+.hero-title span{background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{font-size:17px;color:var(--text2);max-width:560px;margin:0 auto 36px}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-card{padding:20px 24px;border-radius:var(--radius);background:var(--bg-card);border:1px solid var(--border);cursor:pointer;transition:all 0.3s;text-align:left;min-width:150px}
+.hero-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 12px 32px rgba(108,92,231,0.15)}
+.hero-card-icon{font-size:28px;margin-bottom:8px}
+.hero-card-label{font-weight:600;font-size:14px}
+.hero-card-desc{font-size:12px;color:var(--text3);margin-top:2px}
+
+/* ═══════════ SEARCH BAR ═══════════ */
+.search-bar{position:relative;margin-bottom:20px}
+.search-bar input{width:100%;padding:14px 16px 14px 44px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-card);color:var(--text);font-size:15px}
+.search-bar input:focus{border-color:var(--accent)}
+.search-bar::before{content:'';position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px}
+
+/* ═══════════ FILTER TABS ═══════════ */
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.filter-tab{padding:8px 16px;border-radius:20px;background:var(--bg-surface);color:var(--text2);border:1px solid var(--border);font-size:13px;font-weight:500;transition:all 0.2s;cursor:pointer}
+.filter-tab:hover{border-color:var(--accent);color:var(--text)}
+.filter-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media(max-width:768px){
+  .nav{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--bg-card);border-bottom:1px solid var(--border);padding:12px}
+  .nav.open{display:flex}
+  .mobile-toggle{display:flex}
+  .header-inner{flex-wrap:wrap}
+  .user-info span:not(.user-avatar){display:none}
+  .grid-2{grid-template-columns:1fr}
+  .spec-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column;align-items:stretch}
+}
+
+/* ═══════════ CHALLENGE MODE ═══════════ */
+.challenge-item{padding:14px 18px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-card);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:12px;font-weight:500}
+.challenge-item:hover{border-color:var(--accent);background:var(--bg-card2)}
+.challenge-done{border-color:var(--green);background:rgba(52,211,153,0.05)}
+
+/* ═══════════ COMPONENT IMAGE ═══════════ */
+.comp-img-wrap{width:100%;height:175px;border-radius:var(--radius-sm);overflow:hidden;margin-bottom:14px;background:var(--bg-surface);position:relative}
+.comp-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.card:hover .comp-img-wrap img{transform:scale(1.05)}
+
+/* ═══════════ FOOTER ═══════════ */
+.footer{text-align:center;padding:28px;border-top:1px solid var(--border);color:var(--text3);font-size:13px;margin-top:60px}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// BASE DE DATOS DE COMPONENTES
+// ═══════════════════════════════════════════════════════════════
+//
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  GUÍA PARA EDITAR IMÁGENES DE LOS COMPONENTES              ║
+// ║                                                              ║
+// ║  1. Abre este archivo con un editor de texto                ║
+// ║     (Bloc de notas, Notepad++, VS Code, etc.)               ║
+// ║                                                              ║
+// ║  2. Usa Ctrl+F para buscar el nombre del componente         ║
+// ║     Ejemplo: busca "Intel Core i5-12400F"                   ║
+// ║                                                              ║
+// ║  3. Encuentra la línea que dice img:"..."                   ║
+// ║     Ejemplo: img:"https://ejemplo.com/foto.jpg"             ║
+// ║                                                              ║
+// ║  4. Reemplaza la URL entre comillas por la URL de           ║
+// ║     la imagen correcta del componente.                      ║
+// ║                                                              ║
+// ║  OPCIÓN A - Usar imagen de internet:                        ║
+// ║    img:"https://www.sitio.com/imagen-del-producto.jpg"      ║
+// ║                                                              ║
+// ║  OPCIÓN B - Usar imagen local (en la misma carpeta):       ║
+// ║    img:"imagenes/intel-i5-12400f.jpg"                       ║
+// ║    (crea una carpeta "imagenes" junto al archivo HTML       ║
+// ║     y guarda ahí las fotos de cada componente)              ║
+// ║                                                              ║
+// ║  5. Guarda el archivo (Ctrl+S) y recarga en el navegador   ║
+// ║                                                              ║
+// ║  IMPORTANTE: No borres las comillas "" que rodean la URL    ║
+// ╚══════════════════════════════════════════════════════════════╝
+//
+
+const DB = {
+  components: [
+    // ══════════ PROCESADORES (CPU) ══════════
+    // Para cambiar imagen: edita el campo img:"URL_AQUÍ"
+    { id:1, name:"Intel Core i5-12400F", category:"cpu", socket:"LGA 1700",
+      desc:"Procesador de 6 núcleos y 12 hilos. Frecuencia base de 2.5 GHz con turbo hasta 4.4 GHz. Ideal para gaming y tareas de productividad diaria.",
+      specs:{Nucleos:"6",Hilos:"12","Freq. base":"2.5 GHz","Freq. turbo":"4.4 GHz",TDP:"65W",Litografía:"Intel 7 (10nm)"},
+      compat:"Compatible con placas base socket LGA 1700 (chipsets series 600 y 700). No incluye gráficos integrados.",
+      tip:"Alinea el triángulo dorado del procesador con la marca en el socket. Baja la palanca sin forzar.",
+      img:"https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:1 },
+    { id:2, name:"AMD Ryzen 5 5600X", category:"cpu", socket:"AM4",
+      desc:"Procesador de 6 núcleos y 12 hilos con arquitectura Zen 3. Excelente rendimiento por vatio. Incluye cooler Wraith Stealth.",
+      specs:{Nucleos:"6",Hilos:"12","Freq. base":"3.7 GHz","Freq. turbo":"4.6 GHz",TDP:"65W",Litografía:"7nm TSMC"},
+      compat:"Compatible con placas base socket AM4 (B450/B550/X570 con BIOS actualizada).",
+      tip:"Los pines están en el procesador. Levanta la palanca del socket, alinea el triángulo y deja caer suavemente.",
+      img:"https://images.unsplash.com/photo-1555617981-dac3880eac6e?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:1 },
+    { id:3, name:"Intel Core i7-13700K", category:"cpu", socket:"LGA 1700",
+      desc:"Procesador de 16 núcleos (8P+8E) y 24 hilos. Hasta 5.4 GHz en turbo. Excelente para gaming de alta gama y creación de contenido.",
+      specs:{Nucleos:"16 (8P+8E)",Hilos:"24","Freq. base":"3.4 GHz","Freq. turbo":"5.4 GHz",TDP:"125W",Litografía:"Intel 7"},
+      compat:"Compatible con placas LGA 1700 (series 600/700). Requiere buena refrigeración por su TDP alto.",
+      tip:"Para este CPU se recomienda un cooler de torre o líquido. El stock cooler no es suficiente para overclock.",
+      img:"https://images.unsplash.com/photo-1555617766-c94804975da3?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:1 },
+    { id:4, name:"AMD Ryzen 7 5800X3D", category:"cpu", socket:"AM4",
+      desc:"Procesador gaming con tecnología 3D V-Cache. 8 núcleos, 16 hilos y 96MB de caché L3. El mejor CPU gaming en AM4.",
+      specs:{Nucleos:"8",Hilos:"16","Freq. base":"3.4 GHz","Freq. turbo":"4.5 GHz",TDP:"105W","Caché L3":"96 MB"},
+      compat:"Socket AM4. Compatible con B550 y X570. Puede necesitar actualización de BIOS en placas B450.",
+      tip:"No incluye cooler. Necesitarás comprar uno por separado. Un cooler de torre es ideal.",
+      img:"https://images.unsplash.com/photo-1562976540-1502c2145186?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:1 },
+
+    // ══════════ PLACAS BASE (MOTHERBOARD) ══════════
+    // Para cambiar imagen: edita el campo img:"URL_AQUÍ"
+    { id:10, name:"ASUS Prime B660M-A", category:"motherboard", socket:"LGA 1700", ramType:"DDR4", formFactor:"Micro-ATX",
+      desc:"Placa base compacta con soporte PCIe 4.0, 2 slots M.2, USB 3.2 Gen 1 y audio Realtek de alta calidad.",
+      specs:{Chipset:"B660","Slots RAM":"2x DDR4","RAM máx.":"64 GB",PCIe:"4.0","Slots M.2":"2",Factor:"Micro-ATX"},
+      compat:"Socket LGA 1700 para Intel 12va/13va gen. Solo soporta DDR4. No confundir con versión DDR5.",
+      tip:"Instala CPU y RAM antes de montar la placa en el gabinete. Es mucho más fácil así.",
+      img:"https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:2 },
+    { id:11, name:"MSI B550M PRO-VDH WiFi", category:"motherboard", socket:"AM4", ramType:"DDR4", formFactor:"Micro-ATX",
+      desc:"Placa base con WiFi integrado, soporte PCIe 4.0 y M.2 Shield Frozr para refrigeración del SSD.",
+      specs:{Chipset:"B550","Slots RAM":"4x DDR4","RAM máx.":"128 GB",PCIe:"4.0","WiFi":"WiFi 6",Factor:"Micro-ATX"},
+      compat:"Socket AM4 para AMD Ryzen 3000/5000. DDR4 exclusivamente. WiFi 6 integrado.",
+      tip:"Conecta la antena WiFi antes de montar en el gabinete. Alinea los standoffs correctamente.",
+      img:"https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:2 },
+    { id:12, name:"Gigabyte B760M DS3H", category:"motherboard", socket:"LGA 1700", ramType:"DDR5", formFactor:"Micro-ATX",
+      desc:"Placa base con soporte DDR5, PCIe 4.0 y diseño de fases digitales para CPU estable.",
+      specs:{Chipset:"B760","Slots RAM":"2x DDR5","RAM máx.":"96 GB",PCIe:"4.0","Slots M.2":"2",Factor:"Micro-ATX"},
+      compat:"Socket LGA 1700 + DDR5. NO acepta DDR4. Verifica el tipo de RAM antes de comprar.",
+      tip:"DDR5 tiene la muesca en posición diferente. Si la RAM no entra, NO fuerces.",
+      img:"https://images.unsplash.com/photo-1555617766-c94804975da3?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:2 },
+    { id:13, name:"ASUS ROG Strix B550-F Gaming", category:"motherboard", socket:"AM4", ramType:"DDR4", formFactor:"ATX",
+      desc:"Placa base gaming con iluminación RGB, audio SupremeFX, WiFi 6 y excelente VRM para overclock.",
+      specs:{Chipset:"B550","Slots RAM":"4x DDR4","RAM máx.":"128 GB",PCIe:"4.0","WiFi":"WiFi 6",Factor:"ATX"},
+      compat:"Socket AM4. Compatible con Ryzen 3000/5000. Formato ATX (verifica que entre en tu gabinete).",
+      tip:"Placa ATX = necesitas gabinete Mid-Tower o Full-Tower. No cabe en gabinetes Micro-ATX.",
+      img:"https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:2 },
+
+    // ══════════ MEMORIA RAM ══════════
+    // Para cambiar imagen: edita el campo img:"URL_AQUÍ"
+    { id:20, name:"Corsair Vengeance 16GB DDR4-3200", category:"ram", ramType:"DDR4",
+      desc:"Kit de 2x8GB a 3200 MHz con perfil XMP 2.0. Latencia CL16 para rendimiento óptimo en gaming y multitarea.",
+      specs:{Capacidad:"16 GB (2x8GB)",Velocidad:"3200 MHz",Latencia:"CL16",Voltaje:"1.35V",Tipo:"DDR4",Perfil:"XMP 2.0"},
+      compat:"DDR4 — NO compatible con placas DDR5. Físicamente no encaja en slots DDR5.",
+      tip:"Abre las pestañas del slot. Alinea la muesca central de la RAM y presiona firmemente hasta escuchar 'clic'.",
+      img:"https://images.unsplash.com/photo-1541029071515-84cc54f84dc5?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:3 },
+    { id:21, name:"Kingston Fury Beast 16GB DDR5-5200", category:"ram", ramType:"DDR5",
+      desc:"Memoria de nueva generación con velocidades superiores. Diseño con disipador de calor para mejor refrigeración.",
+      specs:{Capacidad:"16 GB (2x8GB)",Velocidad:"5200 MHz",Latencia:"CL40",Voltaje:"1.25V",Tipo:"DDR5",Perfil:"XMP 3.0"},
+      compat:"DDR5 — solo funciona en placas DDR5. INCOMPATIBLE con slots DDR4. La muesca está en posición diferente.",
+      tip:"DDR5 requiere más voltaje inicial. Activa XMP 3.0 en BIOS para máxima velocidad.",
+      img:"https://images.unsplash.com/photo-1562976540-1502c2145186?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:3 },
+    { id:22, name:"G.Skill Ripjaws V 32GB DDR4-3600", category:"ram", ramType:"DDR4",
+      desc:"Kit de alto rendimiento de 2x16GB. Ideal para edición de video, streaming y multitarea pesada.",
+      specs:{Capacidad:"32 GB (2x16GB)",Velocidad:"3600 MHz",Latencia:"CL18",Voltaje:"1.35V",Tipo:"DDR4",Perfil:"XMP 2.0"},
+      compat:"DDR4 compatible con cualquier placa DDR4. 3600 MHz es el sweet spot para Ryzen.",
+      tip:"Para dual channel, usa los slots 2 y 4 (alternados). Revisa el manual de tu placa base.",
+      img:"https://images.unsplash.com/photo-1541029071515-84cc54f84dc5?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:3 },
+    { id:23, name:"Corsair Dominator 32GB DDR5-6000", category:"ram", ramType:"DDR5",
+      desc:"Memoria premium DDR5 con iluminación RGB Capellix. Rendimiento extremo para entusiastas y overclockers.",
+      specs:{Capacidad:"32 GB (2x16GB)",Velocidad:"6000 MHz",Latencia:"CL36",Voltaje:"1.35V",Tipo:"DDR5",RGB:"Capellix"},
+      compat:"Solo DDR5. Requiere placa DDR5 con soporte EXPO/XMP 3.0. Verifica compatibilidad QVL.",
+      tip:"Memoria con RGB requiere software iCUE de Corsair para control de iluminación.",
+      img:"https://images.unsplash.com/photo-1562976540-1502c2145186?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:3 },
+
+    // ══════════ ALMACENAMIENTO ══════════
+    // Para cambiar imagen: edita el campo img:"URL_AQUÍ"
+    { id:30, name:"Samsung 970 EVO Plus 1TB NVMe", category:"storage",
+      desc:"SSD NVMe con velocidades de lectura de 3,500 MB/s. Tecnología V-NAND para durabilidad y fiabilidad.",
+      specs:{Capacidad:"1 TB",Lectura:"3,500 MB/s",Escritura:"3,300 MB/s",Interfaz:"PCIe 3.0 x4","Factor":"M.2 2280",TBW:"600 TB"},
+      compat:"Requiere slot M.2 NVMe en la placa base. Compatible con PCIe 3.0 y 4.0 (retro-compatible).",
+      tip:"Inserta en ángulo de 30° en el slot M.2 y presiona hacia abajo. Asegura con el tornillo pequeño.",
+      img:"https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:4 },
+    { id:31, name:"WD Black SN770 1TB NVMe", category:"storage",
+      desc:"SSD NVMe PCIe Gen4 con hasta 5,150 MB/s de lectura. Sin DRAM pero con excelente rendimiento gaming.",
+      specs:{Capacidad:"1 TB",Lectura:"5,150 MB/s",Escritura:"4,900 MB/s",Interfaz:"PCIe 4.0 x4","Factor":"M.2 2280",TBW:"600 TB"},
+      compat:"PCIe 4.0 x4. Funciona en PCIe 3.0 a velocidad reducida. Requiere slot M.2.",
+      tip:"Si tu placa tiene disipador M.2, retíralo antes de insertar el SSD y vuelve a colocarlo después.",
+      img:"https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:4 },
+    { id:32, name:"Seagate Barracuda 2TB HDD", category:"storage",
+      desc:"Disco duro mecánico de 7200 RPM. Excelente para almacenamiento masivo de archivos, juegos y multimedia.",
+      specs:{Capacidad:"2 TB",Velocidad:"7200 RPM",Caché:"256 MB",Interfaz:"SATA III","Factor":"3.5 pulgadas",Uso:"Escritorio"},
+      compat:"Conector SATA III estándar. Requiere bahía de 3.5\" en el gabinete y cable SATA + alimentación.",
+      tip:"Conecta el cable SATA a la placa y el cable de alimentación SATA de la fuente. Atornilla en la bahía del gabinete.",
+      img:"https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:4 },
+    { id:33, name:"Kingston A400 480GB SSD SATA", category:"storage",
+      desc:"SSD SATA económico ideal como disco de arranque. 10x más rápido que un HDD tradicional.",
+      specs:{Capacidad:"480 GB",Lectura:"500 MB/s",Escritura:"450 MB/s",Interfaz:"SATA III","Factor":"2.5 pulgadas",TBW:"160 TB"},
+      compat:"Interfaz SATA III. Compatible con cualquier placa con puerto SATA. También funciona en laptops.",
+      tip:"Necesita adaptador de 2.5\" a 3.5\" si tu gabinete no tiene bahías para SSD.",
+      img:"https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:4 },
+
+    // ══════════ TARJETAS GRÁFICAS (GPU) ══════════
+    // Para cambiar imagen: edita el campo img:"URL_AQUÍ"
+    { id:40, name:"NVIDIA GeForce RTX 3060 12GB", category:"gpu", tdp:170,
+      desc:"Tarjeta gráfica con ray tracing, DLSS y 12GB GDDR6. Excelente para gaming en 1080p y 1440p.",
+      specs:{VRAM:"12 GB GDDR6","Core Clock":"1.78 GHz",Interfaz:"PCIe 4.0 x16",Largo:"242mm","Conector":"1x 8-pin",TDP:"170W"},
+      compat:"Requiere fuente de al menos 550W. Un conector PCIe de 8 pines. Verifica largo máximo del gabinete.",
+      tip:"Retira las tapas de expansión del gabinete. Inserta en el slot PCIe x16 y conecta el cable de alimentación.",
+      img:"https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:5 },
+    { id:41, name:"AMD Radeon RX 6700 XT 12GB", category:"gpu", tdp:230,
+      desc:"Tarjeta gráfica AMD con 12GB GDDR6, ray tracing y FSR. Rendimiento competitivo en 1440p.",
+      specs:{VRAM:"12 GB GDDR6","Core Clock":"2.42 GHz",Interfaz:"PCIe 4.0 x16",Largo:"267mm","Conector":"1x 8+6-pin",TDP:"230W"},
+      compat:"Requiere fuente de al menos 650W. Dos conectores de alimentación PCIe. Verifica espacio del gabinete.",
+      tip:"AMD recomienda cable separado para cada conector de alimentación. No uses adaptadores en Y.",
+      img:"https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:5 },
+    { id:42, name:"NVIDIA GeForce RTX 4070 12GB", category:"gpu", tdp:200,
+      desc:"GPU de nueva generación con DLSS 3, ray tracing mejorado y eficiencia energética líder. Ideal para 1440p ultra.",
+      specs:{VRAM:"12 GB GDDR6X","Core Clock":"2.48 GHz",Interfaz:"PCIe 4.0 x16",Largo:"244mm","Conector":"1x 16-pin",TDP:"200W"},
+      compat:"Requiere fuente de 650W+. Usa adaptador 12VHPWR incluido o fuente ATX 3.0 nativa.",
+      tip:"El conector 16-pin es delicado. Insértalo completamente y verifica que no haya holgura.",
+      img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:5 },
+    { id:43, name:"NVIDIA GeForce GTX 1650 4GB", category:"gpu", tdp:75,
+      desc:"GPU de entrada ideal para gaming básico en 1080p. No requiere alimentación extra de la fuente (solo PCIe).",
+      specs:{VRAM:"4 GB GDDR6","Core Clock":"1.59 GHz",Interfaz:"PCIe 3.0 x16",Largo:"200mm","Conector":"Ninguno (slot)",TDP:"75W"},
+      compat:"Funciona con cualquier fuente de 300W+. No requiere cables de alimentación adicionales. Ultra compacta.",
+      tip:"Solo insértala en el slot PCIe x16. No necesita cable de alimentación, toma energía del slot directamente.",
+      img:"https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:5 },
+
+    // ══════════ FUENTES DE PODER (PSU) ══════════
+    // Para cambiar imagen: edita el campo img:"URL_AQUÍ"
+    { id:50, name:"EVGA 600W 80+ Bronze", category:"psu", wattage:600,
+      desc:"Fuente de poder con certificación 80+ Bronze. Ventilador silencioso de 120mm. Cables fijos.",
+      specs:{Potencia:"600W",Certificación:"80+ Bronze",Modular:"No",Ventilador:"120mm",Protecciones:"OVP/OCP/SCP","Conector GPU":"1x 6+2 pin"},
+      compat:"600W suficiente para builds con GPU gama media (RTX 3060 / RX 6600). Para RTX 4070+ se recomienda 650W+.",
+      tip:"Monta en la parte inferior del gabinete con el ventilador hacia abajo. Conecta primero el ATX 24-pin.",
+      img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:6 },
+    { id:51, name:"Corsair RM750 80+ Gold", category:"psu", wattage:750,
+      desc:"Fuente modular con certificación 80+ Gold. Ventilador Zero RPM a baja carga para silencio total.",
+      specs:{Potencia:"750W",Certificación:"80+ Gold",Modular:"Full Modular",Ventilador:"135mm","Zero RPM":"Sí","Garantía":"10 años"},
+      compat:"750W cubre builds de gama alta (RTX 4070/4070 Ti). Cables modulares para gestión limpia.",
+      tip:"En fuentes modulares, conecta SOLO los cables que necesites. Menos cables = mejor flujo de aire.",
+      img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:6 },
+    { id:52, name:"Seasonic Focus GX-850 80+ Gold", category:"psu", wattage:850,
+      desc:"Fuente premium fully modular con 10 años de garantía. Ideal para builds de gama alta y overclock.",
+      specs:{Potencia:"850W",Certificación:"80+ Gold",Modular:"Full Modular",Ventilador:"120mm FDB",Protecciones:"Todas","Garantía":"10 años"},
+      compat:"850W para builds enthusiast (RTX 4080/4090). Compatible con ATX 3.0 y conector 12VHPWR con adaptador.",
+      tip:"Seasonic es compatible con cables modulares de otras marcas Seasonic, pero NUNCA uses cables de otra marca.",
+      img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:6 },
+    { id:53, name:"Cooler Master MWE 500W 80+ White", category:"psu", wattage:500,
+      desc:"Fuente económica con certificación 80+ White. Ideal para builds básicos de oficina o gaming ligero.",
+      specs:{Potencia:"500W",Certificación:"80+ White",Modular:"No",Ventilador:"120mm",Protecciones:"OVP/OCP/SCP","Conector GPU":"1x 6+2 pin"},
+      compat:"500W suficiente para GTX 1650, RX 6500 o builds sin GPU dedicada. NO para GPUs de gama media/alta.",
+      tip:"Ideal para presupuestos ajustados. Si planeas upgradar la GPU en el futuro, considera una de mayor potencia.",
+      img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:6 },
+
+    // ══════════ GABINETES (CASE) ══════════
+    // Para cambiar imagen: edita el campo img:"URL_AQUÍ"
+    { id:60, name:"Corsair 4000D Airflow", category:"case", formFactor:"ATX",
+      desc:"Gabinete Mid-Tower con excelente flujo de aire frontal. Panel de vidrio templado y gestión de cables.",
+      specs:{Tipo:"Mid-Tower","GPU máx.":"360mm","CPU Cooler":"170mm","Ventiladores":"2x 120mm incl.",Bahías:"2x 3.5\" + 2x 2.5\"",Factor:"ATX/mATX/ITX"},
+      compat:"Soporta placas ATX, Micro-ATX e ITX. Espacio para GPUs de hasta 360mm y torres de CPU de 170mm.",
+      tip:"Instala primero los standoffs según tu placa, luego la fuente en la parte inferior, y después la placa base.",
+      img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:7 },
+    { id:61, name:"NZXT H510 Flow", category:"case", formFactor:"ATX",
+      desc:"Gabinete elegante con panel frontal perforado para flujo de aire. Diseño minimalista con cable management premium.",
+      specs:{Tipo:"Mid-Tower","GPU máx.":"360mm","CPU Cooler":"165mm","Ventiladores":"2x 120mm incl.",Bahías:"1x 3.5\" + 2x 2.5\"",Factor:"ATX/mATX/ITX"},
+      compat:"Soporta ATX, mATX e ITX. Panel I/O frontal con USB-C. Compatible con radiadores de hasta 280mm.",
+      tip:"NZXT tiene sistema de cable management con canales internos. Úsalos para un build limpio.",
+      img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:7 },
+    { id:62, name:"Cooler Master Q300L", category:"case", formFactor:"Micro-ATX",
+      desc:"Gabinete compacto Micro-ATX con panel magnético de polvo. Muy versátil con orientación ajustable.",
+      specs:{Tipo:"Mini-Tower","GPU máx.":"360mm","CPU Cooler":"157mm","Ventiladores":"1x 120mm incl.",Bahías:"1x 3.5\" + 1x 2.5\"",Factor:"mATX/ITX"},
+      compat:"Solo Micro-ATX e ITX. NO caben placas ATX completas. Verifica el tamaño de tu placa base.",
+      tip:"Gabinete compacto = gestión de cables más importante. Planifica las rutas de cables antes de montar.",
+      img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:7 },
+    { id:63, name:"Fractal Design Meshify C", category:"case", formFactor:"ATX",
+      desc:"Gabinete premium con diseño angular de malla frontal. Excelente térmicas y construcción de alta calidad.",
+      specs:{Tipo:"Mid-Tower","GPU máx.":"315mm","CPU Cooler":"172mm","Ventiladores":"2x 120mm incl.",Bahías:"2x 3.5\" + 3x 2.5\"",Factor:"ATX/mATX/ITX"},
+      compat:"ATX/mATX/ITX. GPU máx. 315mm (más corta que otros). Mide tu GPU antes de comprar.",
+      tip:"El diseño angular de la malla es estético pero funcional. Limpia el filtro frontal regularmente.",
+      img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&h=300&fit=crop",
+      video:"uUGI3Grx4qU", order:7 },
+  ],
+
+  stores: [
+    { id:1, name:"CompuZone Ecuador", location:"Quito, Av. Amazonas N36-84", url:"https://www.compuzone.com.ec", rating:4.5, verified:true },
+    { id:2, name:"TecnoMega", location:"Quito, C.C. El Recreo", url:"https://www.tecnomega.com.ec", rating:4.3, verified:true },
+    { id:3, name:"MegaMicro", location:"Quito, Av. 10 de Agosto", url:"https://www.megamicro.com.ec", rating:4.1, verified:true },
+    { id:4, name:"Novicompu", location:"Guayaquil / Quito, múltiples locales", url:"https://www.novicompu.com", rating:4.2, verified:true },
+    { id:5, name:"Amazon (Internacional)", location:"Envío a Ecuador disponible", url:"https://www.amazon.com", rating:4.7, verified:true },
+    { id:6, name:"Newegg (Internacional)", location:"Envío internacional", url:"https://www.newegg.com", rating:4.4, verified:true },
+  ],
+
+  assemblySteps: [
+    {step:1, title:"Preparar el gabinete", desc:"Retira los paneles laterales y verifica que los standoffs estén correctamente instalados según tu placa base (ATX, mATX o ITX).", cat:"case",
+     img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:2, title:"Instalar el procesador (CPU)", desc:"Levanta la palanca del socket, alinea las marcas (triángulo dorado) del procesador y colócalo suavemente. Baja la palanca para asegurarlo.", cat:"cpu",
+     img:"https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:3, title:"Aplicar pasta térmica", desc:"Aplica una gota del tamaño de un grano de arroz en el centro del procesador. El disipador la esparcirá uniformemente al hacer presión.", cat:"cpu",
+     img:"https://images.unsplash.com/photo-1555617981-dac3880eac6e?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:4, title:"Instalar el disipador/cooler", desc:"Coloca el disipador sobre el CPU, asegura los tornillos en patrón de X (esquinas opuestas) y conecta el cable del ventilador al header CPU_FAN de la placa.", cat:"cpu",
+     img:"https://images.unsplash.com/photo-1555617766-c94804975da3?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:5, title:"Instalar la memoria RAM", desc:"Abre las pestañas de los slots (usa slots 2 y 4 para dual channel), alinea la muesca de la RAM y presiona firmemente hasta escuchar el 'clic'.", cat:"ram",
+     img:"https://images.unsplash.com/photo-1541029071515-84cc54f84dc5?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:6, title:"Instalar almacenamiento M.2/SSD", desc:"Si tienes SSD M.2, insértalo en ángulo de 30° en el slot y asegúralo con el tornillo. Para SATA SSD, usa una bahía de 2.5\".", cat:"storage",
+     img:"https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:7, title:"Montar la placa en el gabinete", desc:"Coloca el escudo I/O trasero. Alinea la placa sobre los standoffs y atornilla en patrón de X empezando por el centro.", cat:"motherboard",
+     img:"https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:8, title:"Instalar la fuente de poder", desc:"Monta la PSU en la parte inferior del gabinete con el ventilador hacia abajo. Conecta el cable ATX de 24 pines y el de 4+4 pines del CPU.", cat:"psu",
+     img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:9, title:"Instalar la tarjeta gráfica", desc:"Retira las tapas de expansión necesarias, inserta la GPU firmemente en el slot PCIe x16 y conecta los cables de alimentación PCIe de la fuente.", cat:"gpu",
+     img:"https://images.unsplash.com/photo-1591488320449-011701bb6704?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:10, title:"Conectar cables del panel frontal", desc:"Conecta los cables de encendido (Power SW), reset, LED HDD y USB del gabinete a los headers correspondientes. Revisa el manual de la placa.", cat:"case",
+     img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:11, title:"Gestión de cables", desc:"Organiza todos los cables detrás de la bandeja de la placa base usando las rutas del gabinete. Usa amarras/velcro para mantener el flujo de aire limpio.", cat:"case",
+     img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+    {step:12, title:"Primer encendido y BIOS", desc:"Conecta monitor (HDMI/DP a la GPU), teclado y ratón. Conecta el cable de corriente y enciende. Verifica que entre al BIOS. ¡Tu PC está lista!", cat:"case",
+     img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=300&h=200&fit=crop", video:"uUGI3Grx4qU"},
+  ],
+
+  quiz: [
+    {id:1, q:"¿Qué componente se instala primero en la placa base antes de montarla en el gabinete?",
+     opts:["Tarjeta gráfica","Procesador (CPU)","Fuente de poder","Disco duro"], correct:1,
+     explain:"El procesador se instala primero porque es más fácil acceder al socket cuando la placa está fuera del gabinete. Luego la RAM y el SSD M.2."},
+    {id:2, q:"¿Por qué es importante verificar el tipo de socket antes de comprar un procesador?",
+     opts:["Para saber el color del CPU","Porque cada socket tiene forma diferente y no son intercambiables","Solo por estética","No es importante"],
+     correct:1, explain:"Cada socket tiene una configuración física diferente. Un CPU LGA 1700 no cabe en un socket AM4 y forzarlo dañaría ambos componentes."},
+    {id:3, q:"¿Qué sucede si instalas una memoria RAM DDR5 en una placa que solo soporta DDR4?",
+     opts:["Funciona pero más lento","No encaja físicamente por la diferente posición de la muesca","Se adapta automáticamente","Solo pierde velocidad"],
+     correct:1, explain:"Las memorias DDR4 y DDR5 tienen la muesca en posición diferente. Físicamente no es posible insertar una en el slot de la otra."},
+    {id:4, q:"¿Cuánta pasta térmica se debe aplicar al procesador?",
+     opts:["Cubrir toda la superficie","Una gota del tamaño de un grano de arroz","Una línea de esquina a esquina","No se necesita pasta térmica"],
+     correct:1, explain:"Un grano de arroz es suficiente. El disipador la esparcirá al hacer presión. Demasiada pasta puede desbordarse y causar problemas."},
+    {id:5, q:"¿Cuál es el patrón correcto para atornillar la placa base o el disipador?",
+     opts:["De izquierda a derecha","En patrón de X (esquinas opuestas)","Todos a la vez","De arriba hacia abajo"],
+     correct:1, explain:"El patrón de X distribuye la presión uniformemente, evitando que la placa se flexione o el disipador quede mal asentado."},
+    {id:6, q:"¿Qué cable de la fuente de poder alimenta principalmente la placa base?",
+     opts:["Cable SATA","Cable ATX de 24 pines","Cable PCIe de 8 pines","Cable molex de 4 pines"],
+     correct:1, explain:"El conector ATX de 24 pines es el principal que alimenta la placa base. Sin él, el sistema no enciende."},
+    {id:7, q:"Si tu GPU consume 200W y el CPU 125W, ¿cuál es la fuente mínima recomendada?",
+     opts:["350W","500W","650W","1000W"],
+     correct:2, explain:"El consumo total (~325W) más periféricos (~75W) = ~400W. Se recomienda 1.5x-2x del consumo, es decir 650W para tener margen de seguridad."},
+    {id:8, q:"¿Por qué el ventilador de la fuente se instala mirando hacia abajo?",
+     opts:["Por estética del gabinete","Para aspirar aire fresco desde fuera del gabinete","No importa la dirección","Para hacer menos ruido únicamente"],
+     correct:1, explain:"Mirando hacia abajo, toma aire fresco del exterior por la rejilla inferior, mejorando la refrigeración sin competir con el aire caliente interno."},
+    {id:9, q:"¿Qué debes hacer ANTES de tocar cualquier componente interno?",
+     opts:["Lavarte las manos con agua","Tocar una superficie metálica sin pintura para descargar electricidad estática","Ponerte guantes de lana","No es necesario nada especial"],
+     correct:1, explain:"La electricidad estática puede dañar componentes. Tocar metal sin pintura (como el gabinete) descarga la estática acumulada en tu cuerpo."},
+    {id:10, q:"¿Qué son los standoffs y para qué sirven?",
+     opts:["Tornillos decorativos","Separadores que elevan la placa base del gabinete para evitar cortocircuitos","Cables de la fuente","Partes del disipador del CPU"],
+     correct:1, explain:"Los standoffs son separadores hexagonales que crean espacio entre la placa y la bandeja metálica, evitando que los circuitos toquen el metal y provoquen cortocircuitos."},
+  ],
+
+  categories: {
+    cpu:{name:"Procesadores (CPU)",icon:"CPU",color:"#2563eb",desc:"El cerebro de la computadora"},
+    motherboard:{name:"Placas Base",icon:"MB",color:"#0891b2",desc:"Conecta todos los componentes"},
+    ram:{name:"Memoria RAM",icon:"RAM",color:"#16a34a",desc:"Memoria de trabajo temporal"},
+    storage:{name:"Almacenamiento",icon:"SSD",color:"#db2777",desc:"Guarda tus datos y programas"},
+    gpu:{name:"Tarjetas Graficas (GPU)",icon:"GPU",color:"#d97706",desc:"Procesa los graficos y video"},
+    psu:{name:"Fuentes de Poder (PSU)",icon:"PSU",color:"#dc2626",desc:"Alimenta todo el sistema"},
+    case:{name:"Gabinetes",icon:"CASE",color:"#7c3aed",desc:"La carcasa que protege tu PC"},
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+// APP STATE
+// ═══════════════════════════════════════════════════════════════
+let state = {
+  user:null, role:null, section:'home',
+  components:[...DB.components], stores:[...DB.stores],
+  mobileNav:false,
+  // component section
+  filter:'all', search:'', selectedComp:null,
+  // compatibility
+  sel:{cpu:'',motherboard:'',ram:'',gpu:'',psu:''}, compatResults:null,
+  // simulator
+  simStep:0, simCompleted:[], challengeMode:false, challengeItems:[], challengeOrder:[], challengeFeedback:null, challengeScore:0,
+  // quiz
+  quizQ:0, quizSelected:null, quizShowExplain:false, quizAnswers:[], quizFinished:false,
+  // admin modals
+  showAddComp:false, editComp:null, showAddStore:false,
+  // admin form
+  formData:{}, formErrors:{},
+  // comparador
+  cmpCat:'cpu', cmpA:'', cmpB:'',
+  // presupuesto
+  budgetSel:{cpu:'',motherboard:'',ram:'',storage:'',gpu:'',psu:'',case:''}
+};
+
+function setState(updates) {
+  Object.assign(state, updates);
+  render();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER ENGINE
+// ═══════════════════════════════════════════════════════════════
+const $=id=>document.getElementById(id);
+const app=$('app');
+
+function h(tag,attrs,...children){
+  let html = '<'+tag;
+  if(attrs) for(let k in attrs){
+    if(k==='onclick'||k==='onchange'||k==='oninput'||k==='onkeydown') continue;
+    if(attrs[k]===false||attrs[k]===null||attrs[k]===undefined) continue;
+    html+=' '+k+'="'+(attrs[k]+'').replace(/"/g,'&quot;')+'"';
+  }
+  html+='>';
+  const voids=['img','input','br','hr','meta','link'];
+  if(!voids.includes(tag)){
+    for(let c of children){
+      if(Array.isArray(c)) html+=c.join('');
+      else if(c!==null&&c!==undefined&&c!==false) html+=c;
+    }
+    html+='</'+tag+'>';
+  }
+  return html;
+}
+
+function stars(v) {
+  let s='';
+  for(let i=1;i<=5;i++) s+='<span style="color:'+(i<=Math.round(v)?'var(--amber)':'var(--text3)')+'">&#9733;</span>';
+  return s+' <span style="font-size:13px;color:var(--text2);margin-left:4px">'+v+'</span>';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SECTION RENDERERS
+// ═══════════════════════════════════════════════════════════════
+
+function renderLogin(){
+  return `
+  <div class="login-wrapper">
+    <div class="login-bg"></div>
+    <div class="login-card card anim-fade" style="padding:40px">
+      <div class="text-center mb-24">
+        <div style="font-size:60px;margin-bottom:12px;animation:float 3s ease-in-out infinite"></div>
+        <h1 style="font-size:28px;font-weight:800;letter-spacing:-0.5px">PC Builder Pro</h1>
+        <p style="color:var(--text2);font-size:14px;margin-top:4px">Aprende a armar tu computadora</p>
+      </div>
+      <div class="login-tabs">
+        <button class="login-tab ${state.loginMode!=='admin'?'active':''}" onclick="setState({loginMode:'user',loginError:''})"> Usuario</button>
+        <button class="login-tab ${state.loginMode==='admin'?'active':''}" onclick="setState({loginMode:'admin',loginError:''})"> Administrador</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">${state.loginMode==='admin'?'Usuario':'Tu nombre'}</label>
+        <input class="form-input" id="login-user" placeholder="${state.loginMode==='admin'?'admin':'Ej: Joaquín'}" value="${state.loginUser||''}"
+          oninput="state.loginUser=this.value;state.loginError=''" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      ${state.loginMode==='admin'?`
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="login-pass" placeholder="••••••••" value="${state.loginPass||''}"
+          oninput="state.loginPass=this.value;state.loginError=''" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>`:''}
+      ${state.loginError?`<div class="compat-box compat-err mb-16" style="font-size:13px;font-weight:500"> ${state.loginError}</div>`:''}
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;font-size:16px" onclick="doLogin()">
+        ${state.loginMode==='admin'?'Ingresar como Administrador':'Comenzar a Aprender'}
+      </button>
+      ${state.loginMode==='admin'?'<p style="text-align:center;margin-top:12px;font-size:12px;color:var(--text3)">Demo: usuario <b>admin</b> / contraseña <b>admin123</b></p>':''}
+    </div>
+  </div>`;
+}
+
+function renderHeader(){
+  const items=[
+    {id:'home',label:'Inicio',icon:''},
+    {id:'components',label:'Componentes',icon:''},
+    {id:'compatibility',label:'Compatibilidad',icon:''},
+    {id:'comparator',label:'Comparador',icon:''},
+    {id:'budget',label:'Presupuesto',icon:''},
+    {id:'simulator',label:'Simulador',icon:''},
+    {id:'quiz',label:'Desaf\u00edos',icon:''},
+    {id:'stores',label:'Tiendas',icon:''},
+  ];
+  return `
+  <header class="header">
+    <div class="container header-inner">
+      <div class="logo"><div class="logo-icon"></div>PC Builder Pro ${state.role==='admin'?'<span class="badge badge-purple">Admin</span>':''}</div>
+      <nav class="nav ${state.mobileNav?'open':''}">
+        ${items.map(i=>`<button class="nav-btn ${state.section===i.id?'active':''}" onclick="navigate('${i.id}')">${i.icon} ${i.label}</button>`).join('')}
+      </nav>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="user-info"><div class="user-avatar">${(state.user||'U')[0].toUpperCase()}</div><span>${state.user}</span></div>
+        <button class="btn-icon" onclick="doLogout()" title="Cerrar sesión">↩</button>
+        <button class="mobile-toggle" onclick="setState({mobileNav:!state.mobileNav})">☰</button>
+      </div>
+    </div>
+  </header>`;
+}
+
+function renderHero(){
+  const cards=[
+    {id:'components',icon:'',label:'Componentes',desc:'Conoce cada pieza'},
+    {id:'compatibility',icon:'',label:'Compatibilidad',desc:'Verifica tus piezas'},
+    {id:'comparator',icon:'',label:'Comparador',desc:'Compara lado a lado'},
+    {id:'budget',icon:'',label:'Presupuesto',desc:'Calcula tu inversi\u00f3n'},
+    {id:'simulator',icon:'',label:'Simulador',desc:'Practica el armado'},
+    {id:'quiz',icon:'',label:'Desaf\u00edos',desc:'Pon a prueba tu conocimiento'},
+  ];
+  return `
+  <section class="hero container anim-fade">
+    <div style="font-size:72px;margin-bottom:16px;animation:float 3s ease-in-out infinite"></div>
+    <h1 class="hero-title">Aprende a armar tu <span>PC desde cero</span></h1>
+    <p class="hero-desc">Guías paso a paso, videos tutoriales, verificación de compatibilidad y desafíos interactivos. Todo lo que necesitas para ensamblar tu computadora con confianza.</p>
+    <div class="hero-actions">
+      ${cards.map((c,i)=>`
+        <div class="hero-card anim-fade-d${Math.min(i+1,3)}" onclick="navigate('${c.id}')">
+          <div class="hero-card-icon">${c.icon}</div>
+          <div class="hero-card-label">${c.label}</div>
+          <div class="hero-card-desc">${c.desc}</div>
+        </div>`).join('')}
+    </div>
+  </section>`;
+}
+
+function renderComponents(){
+  const cats = DB.categories;
+  const s = state;
+  const filtered = s.components.filter(c=> (s.filter==='all'||c.category===s.filter) && (!s.search || c.name.toLowerCase().includes(s.search.toLowerCase()) || c.desc.toLowerCase().includes(s.search.toLowerCase())));
+
+  // Group by category
+  const grouped={};
+  const catOrder=['cpu','motherboard','ram','storage','gpu','psu','case'];
+  catOrder.forEach(cat=>{grouped[cat]=filtered.filter(c=>c.category===cat)});
+
+  let sectionsHTML='';
+  if(s.filter==='all'){
+    catOrder.forEach(cat=>{
+      if(grouped[cat].length===0) return;
+      const ci=cats[cat];
+      sectionsHTML+=`
+        <div class="category-title" style="color:${ci.color}">
+          <span style="font-size:24px">${ci.icon}</span> ${ci.name}
+          <span style="font-size:13px;font-weight:400;color:var(--text3);margin-left:auto">${ci.desc} — ${grouped[cat].length} items</span>
+        </div>
+        <div class="grid-4">${grouped[cat].map(c=>renderCompCard(c)).join('')}</div>`;
+    });
+  } else {
+    sectionsHTML=`<div class="grid-4">${filtered.map(c=>renderCompCard(c)).join('')}</div>`;
+    if(filtered.length===0) sectionsHTML='<div class="text-center mt-32" style="color:var(--text3)"><span style="font-size:48px"></span><p class="mt-16">No se encontraron componentes</p></div>';
+  }
+
+  return `
+  <section class="container anim-fade" style="padding-top:32px">
+    <div class="flex-between section-header">
+      <div>
+        <h2 class="section-title"> Catálogo de componentes</h2>
+        <p class="section-subtitle">Explora cada pieza, conoce sus especificaciones y verifica su compatibilidad.</p>
+      </div>
+      ${s.role==='admin'?'<button class="btn btn-primary" onclick="openAddComp()">+ Agregar componente</button>':''}
+    </div>
+    <div class="search-bar"><input class="form-input" style="padding-left:44px" placeholder="Buscar componentes por nombre o descripción..." value="${s.search}" oninput="setState({search:this.value})"></div>
+    <div class="filter-tabs">
+      <button class="filter-tab ${s.filter==='all'?'active':''}" onclick="setState({filter:'all'})">Todos</button>
+      ${catOrder.map(k=>`<button class="filter-tab ${s.filter===k?'active':''}" onclick="setState({filter:'${k}'})">${cats[k].icon} ${cats[k].name}</button>`).join('')}
+    </div>
+    ${sectionsHTML}
+  </section>`;
+}
+
+function renderCompCard(c){
+  const cat=DB.categories[c.category];
+  return `
+  <div class="card card-compact" style="cursor:pointer" onclick="openComp(${c.id})">
+    <div class="comp-img-wrap"><img src="${c.img}" alt="${c.name}" loading="lazy" onerror="this.style.display='none'"></div>
+    <span class="badge" style="background:${cat.color}15;color:${cat.color}">${cat.icon} ${cat.name}</span>
+    <h4 style="margin:10px 0 4px;font-size:15px;font-weight:600">${c.name}</h4>
+    <p style="font-size:13px;color:var(--text2);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${c.desc}</p>
+    ${state.role==='admin'?`
+    <div style="display:flex;gap:6px;margin-top:10px">
+      <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();openEditComp(${c.id})">Editar</button>
+      <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteComp(${c.id})">Eliminar</button>
+    </div>`:''}
+  </div>`;
+}
+
+function renderCompDetail(c){
+  if(!c) return '';
+  const cat=DB.categories[c.category];
+  const specKeys=Object.keys(c.specs||{});
+  return `
+  <div class="modal-overlay" onclick="setState({selectedComp:null})">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">${c.name}</h3>
+        <button class="modal-close" onclick="setState({selectedComp:null})">X</button>
+      </div>
+      <img src="${c.img}" alt="${c.name}" class="detail-img" onerror="this.style.display='none'">
+      <span class="badge mb-16" style="background:${cat.color}15;color:${cat.color}">${cat.icon} ${cat.name}</span>
+      <p style="color:var(--text2);line-height:1.6;margin:12px 0">${c.desc}</p>
+
+      <h4 style="font-size:14px;font-weight:700;margin:20px 0 10px;color:var(--text);text-transform:uppercase;letter-spacing:0.5px;font-size:12px">Especificaciones técnicas</h4>
+      <div class="spec-grid">
+        ${specKeys.map(k=>`<div class="spec-item"><div class="spec-label">${k}</div><div class="spec-value">${c.specs[k]}</div></div>`).join('')}
+      </div>
+
+      <div class="compat-box compat-warn">
+        <div style="font-weight:600;color:var(--amber);margin-bottom:4px"> Nota de compatibilidad</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.5">${c.compat}</div>
+      </div>
+
+      <div class="compat-box compat-ok">
+        <div style="font-weight:600;color:var(--green);margin-bottom:4px"> Consejo de instalación</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.5">${c.tip}</div>
+      </div>
+
+      <a href="https://www.youtube.com/watch?v=${c.video}" target="_blank" rel="noopener" class="video-link mt-16"> Ver video tutorial de instalación en YouTube</a>
+    </div>
+  </div>`;
+}
+
+function renderCompatibility(){
+  const s=state;
+  const byCat=cat=>s.components.filter(c=>c.category===cat);
+  function selField(label,cat,icon){
+    return `<div class="form-group">
+      <label class="form-label">${icon} ${label}</label>
+      <select class="form-select" onchange="state.sel.${cat}=this.value;render()">
+        <option value="">-- Seleccionar --</option>
+        ${byCat(cat).map(c=>`<option value="${c.id}" ${s.sel[cat]==c.id?'selected':''}>${c.name}</option>`).join('')}
+      </select>
+    </div>`;
+  }
+
+  let resultsHTML='';
+  if(s.compatResults){
+    const r=s.compatResults;
+    resultsHTML=`<div class="card mt-24 anim-fade" style="border-color:var(--border2)">
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:16px"> Resultados del análisis</h3>
+      ${r.errors.map(e=>`<div class="compat-box compat-err"><div style="font-weight:600;color:var(--red);margin-bottom:4px"> ${e.title}</div><div style="font-size:13px;color:var(--text2)">${e.detail}</div></div>`).join('')}
+      ${r.warnings.map(w=>`<div class="compat-box compat-warn"><div style="font-weight:600;color:var(--amber);margin-bottom:4px"> ${w.title}</div><div style="font-size:13px;color:var(--text2)">${w.detail}</div></div>`).join('')}
+      ${r.passes.map(p=>`<div class="compat-box compat-ok"><div style="font-weight:600;color:var(--green);margin-bottom:4px"> ${p.title}</div><div style="font-size:13px;color:var(--text2)">${p.detail}</div></div>`).join('')}
+      ${r.errors.length===0&&r.warnings.length===0&&r.passes.length>0?'<div class="text-center mt-16"><span style="font-size:56px"></span><p style="font-weight:700;font-size:18px;color:var(--green);margin-top:8px">¡Todos los componentes son compatibles!</p></div>':''}
+      ${r.powerData?`
+      <div style="margin-top:20px;padding:20px;border-radius:var(--radius);background:var(--bg-card2);border:1px solid var(--border)">
+        <h4 style="font-size:14px;font-weight:700;margin-bottom:12px"> Estimador de consumo energético</h4>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+          ${r.powerData.items.map(p=>`<div style="flex:1;min-width:120px;padding:10px;border-radius:8px;background:var(--bg-deep);text-align:center">
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase">${p.label}</div>
+            <div style="font-size:20px;font-weight:700;color:var(--text)">${p.watts}W</div>
+          </div>`).join('')}
+        </div>
+        <div class="progress-bar" style="height:20px;border-radius:6px;position:relative;margin-bottom:6px">
+          <div class="progress-fill" style="width:${Math.min((r.powerData.total/r.powerData.psu)*100,100)}%;background:${r.powerData.total/r.powerData.psu>0.85?'var(--red)':r.powerData.total/r.powerData.psu>0.7?'var(--amber)':'var(--green)'};border-radius:6px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text2)">
+          <span>Consumo total: <b style="color:var(--text)">${r.powerData.total}W</b></span>
+          <span>Fuente: <b style="color:var(--text)">${r.powerData.psu}W</b></span>
+          <span>Uso: <b style="color:${r.powerData.total/r.powerData.psu>0.85?'var(--red)':'var(--text)'}">${Math.round((r.powerData.total/r.powerData.psu)*100)}%</b></span>
+        </div>
+      </div>`:''}
+    </div>`;
+  }
+
+  return `
+  <section class="container anim-fade" style="padding-top:32px">
+    <div class="section-header">
+      <h2 class="section-title"> Verificador de compatibilidad</h2>
+      <p class="section-subtitle">Selecciona tus componentes para verificar si funcionan juntos antes de comprar o armar tu PC.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h4 style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px">Componentes principales</h4>
+        ${selField('Procesador (CPU)','cpu','')}
+        ${selField('Placa base','motherboard','')}
+        ${selField('Memoria RAM','ram','')}
+      </div>
+      <div class="card">
+        <h4 style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px">Gráficos y energía</h4>
+        ${selField('Tarjeta gráfica','gpu','')}
+        ${selField('Fuente de poder','psu','')}
+        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="checkCompat()"> Verificar compatibilidad</button>
+      </div>
+    </div>
+    ${resultsHTML}
+  </section>`;
+}
+
+function renderSimulator(){
+  if(state.challengeMode) return renderChallenge();
+  const s=state;
+  const steps=DB.assemblySteps;
+  return `
+  <section class="container anim-fade" style="padding-top:32px">
+    <div class="flex-between section-header">
+      <div>
+        <h2 class="section-title"> Simulador de ensamblaje</h2>
+        <p class="section-subtitle">Sigue la guía paso a paso con imágenes y videos para cada etapa del armado.</p>
+      </div>
+      <button class="btn btn-primary" onclick="startChallenge()"> Modo desafío</button>
+    </div>
+    <div class="card mb-24" style="border-color:var(--accent);background:var(--bg-card2)">
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:8px"> Video tutorial completo: Cómo armar una PC paso a paso</h3>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Este video de 10 minutos muestra el proceso completo de ensamblaje. Míralo antes de comenzar la guía interactiva.</p>
+      <a href="https://www.youtube.com/watch?v=uUGI3Grx4qU" target="_blank" rel="noopener" class="video-link"> Ver video completo de ensamblaje en YouTube</a>
+    </div>
+    <div class="progress-bar mb-8"><div class="progress-fill" style="width:${(s.simCompleted.length/steps.length)*100}%"></div></div>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:24px">Progreso: ${s.simCompleted.length} / ${steps.length} pasos completados</p>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      ${steps.map((step,i)=>{
+        const isActive=i===s.simStep, isDone=s.simCompleted.includes(i), isLocked=i>s.simStep&&!isDone;
+        return `
+        <div class="step-card ${isActive?'active':''} ${isDone?'completed':''}" style="opacity:${isLocked?'0.4':'1'}" onclick="${isActive||isDone?`setState({simStep:${i}})`:''}">
+          <div class="step-num">${isDone?'Si':step.step}</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <h4 style="font-size:16px;font-weight:600">${step.title}</h4>
+              <span class="badge badge-purple" style="font-size:11px">${DB.categories[step.cat]?.name||''}</span>
+            </div>
+            ${isActive?`
+              <div style="margin-top:12px">
+                <img src="${step.img}" alt="${step.title}" style="width:100%;max-width:400px;height:160px;object-fit:cover;border-radius:var(--radius-sm);margin-bottom:12px" loading="lazy" onerror="this.style.display='none'">
+                <p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:16px">${step.desc}</p>
+                <a href="https://www.youtube.com/watch?v=uUGI3Grx4qU" target="_blank" rel="noopener" class="video-link" style="margin-bottom:16px;display:inline-flex"> Ver video de este paso en YouTube</a>
+                <button class="btn btn-primary mt-16" onclick="event.stopPropagation();completeStep(${i})">
+                  ${i<steps.length-1?'Completar y continuar →':'¡Finalizar ensamblaje! '}
+                </button>
+              </div>`:''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </section>`;
+}
+
+function renderChallenge(){
+  const s=state;
+  const total=DB.assemblySteps.length;
+  if(s.challengeItems.length===0 && s.challengeOrder.length===total){
+    return `
+    <section class="container anim-fade" style="padding-top:32px">
+      <div class="text-center" style="padding:40px 0">
+        <span style="font-size:80px"></span>
+        <h2 style="font-size:28px;font-weight:800;margin:16px 0 8px;color:var(--accent)">¡Desafío completado!</h2>
+        <p style="font-size:18px;color:var(--text2)">Puntuación: ${s.challengeScore} / ${total*10} puntos</p>
+        <div style="max-width:300px;margin:16px auto">
+          <div class="progress-bar"><div class="progress-fill" style="width:${(s.challengeScore/(total*10))*100}%"></div></div>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:24px">
+          <button class="btn btn-primary" onclick="startChallenge()">Intentar de nuevo</button>
+          <button class="btn btn-secondary" onclick="setState({challengeMode:false})">Volver a guía</button>
+        </div>
+      </div>
+    </section>`;
+  }
+  return `
+  <section class="container anim-fade" style="padding-top:32px">
+    <div class="flex-between section-header">
+      <div>
+        <h2 class="section-title"> Desafío de ensamblaje</h2>
+        <p class="section-subtitle">Selecciona los pasos en el orden correcto. ¡Cada acierto vale 10 puntos!</p>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <span class="badge badge-green">Puntos: ${s.challengeScore}</span>
+        <button class="btn btn-secondary btn-sm" onclick="setState({challengeMode:false})">Volver a guía</button>
+      </div>
+    </div>
+    <div class="progress-bar mb-8"><div class="progress-fill" style="width:${(s.challengeOrder.length/total)*100}%"></div></div>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:16px">Progreso: ${s.challengeOrder.length} / ${total}</p>
+    ${s.challengeFeedback?`<div class="compat-box ${s.challengeFeedback.type==='success'?'compat-ok':'compat-err'} mb-16" style="font-weight:500;font-size:14px">${s.challengeFeedback.type==='success'?'':''} ${s.challengeFeedback.msg}</div>`:''}
+    ${s.challengeOrder.length>0?`
+      <div class="mb-24">${s.challengeOrder.map((item,i)=>`
+        <div class="challenge-item challenge-done" style="margin-bottom:6px;cursor:default">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">${i+1}</div>
+          <span>${item.title}</span>
+        </div>`).join('')}
+      </div>`:''}
+    <h4 style="font-size:14px;font-weight:600;color:var(--text2);margin-bottom:12px">Selecciona el paso #${s.challengeOrder.length+1}:</h4>
+    <div class="grid-3">
+      ${s.challengeItems.map(item=>`
+        <div class="challenge-item" onclick="challengeSelect(${item.step})">
+          <img src="${item.img}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'" loading="lazy">
+          <span style="font-size:14px">${item.title}</span>
+        </div>`).join('')}
+    </div>
+  </section>`;
+}
+
+function renderQuiz(){
+  const s=state;
+  const qs=DB.quiz;
+  if(s.quizFinished){
+    const correct=s.quizAnswers.filter(a=>a.sel===a.correct).length;
+    const pct=Math.round((correct/qs.length)*100);
+    return `
+    <section class="container anim-fade" style="padding-top:32px">
+      <div class="text-center" style="padding:40px 0">
+        <span style="font-size:80px">${pct>=70?'':pct>=50?'👍':'📚'}</span>
+        <h2 style="font-size:28px;font-weight:800;margin:16px 0 8px">${pct>=70?'¡Excelente!':pct>=50?'¡Buen trabajo!':'¡Sigue practicando!'}</h2>
+        <p style="font-size:18px;color:var(--text2)">${correct} de ${qs.length} respuestas correctas</p>
+        <div style="max-width:300px;margin:16px auto"><div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${pct>=70?'var(--green)':pct>=50?'var(--amber)':'var(--red)'}"></div></div></div>
+        <p style="font-size:48px;font-weight:800;color:var(--accent);margin:8px 0 24px">${pct}%</p>
+        <button class="btn btn-primary" onclick="restartQuiz()">Intentar de nuevo</button>
+      </div>
+    </section>`;
+  }
+  const q=qs[s.quizQ];
+  return `
+  <section class="container anim-fade" style="padding-top:32px">
+    <div class="flex-between section-header">
+      <h2 class="section-title"> Desafíos de conocimiento</h2>
+      <span class="badge badge-purple">Pregunta ${s.quizQ+1} / ${qs.length}</span>
+    </div>
+    <div class="progress-bar mb-24"><div class="progress-fill" style="width:${(s.quizQ/qs.length)*100}%"></div></div>
+    <div class="card" style="max-width:700px">
+      <h3 style="font-size:18px;font-weight:600;line-height:1.5;margin-bottom:20px">${q.q}</h3>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${q.opts.map((opt,i)=>{
+          let cls='quiz-option';
+          if(s.quizSelected!==null){
+            cls+=' disabled';
+            if(i===q.correct) cls+=' correct';
+            else if(i===s.quizSelected && i!==q.correct) cls+=' wrong';
+          }
+          return `<div class="${cls}" onclick="answerQuiz(${i})">
+            <div class="quiz-letter">${s.quizSelected!==null&&i===q.correct?'Si':s.quizSelected===i&&i!==q.correct?'X':'ABCD'[i]}</div>
+            <span>${opt}</span>
+          </div>`;
+        }).join('')}
+      </div>
+      ${s.quizShowExplain?`
+        <div class="compat-box compat-info mt-16">
+          <div style="font-weight:600;color:var(--cyan);margin-bottom:4px"> Explicación</div>
+          <div style="font-size:14px;color:var(--text2);line-height:1.5">${q.explain}</div>
+        </div>
+        <button class="btn btn-primary mt-16" onclick="nextQuiz()">${s.quizQ<qs.length-1?'Siguiente pregunta →':'Ver resultados'}</button>
+      `:''}
+    </div>
+  </section>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SECCIÓN: COMPARADOR LADO A LADO
+// ═══════════════════════════════════════════════════════════════
+function renderComparator(){
+  const s=state;
+  const cats=DB.categories;
+  const catKeys=Object.keys(cats);
+  const byCat=state.components.filter(c=>c.category===s.cmpCat);
+  const compA=byCat.find(c=>c.id==s.cmpA);
+  const compB=byCat.find(c=>c.id==s.cmpB);
+
+  let tableHTML='';
+  if(compA && compB){
+    const allKeys=[...new Set([...Object.keys(compA.specs||{}), ...Object.keys(compB.specs||{})])];
+    tableHTML=`
+    <div class="card mt-24 anim-fade">
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:16px">Resultado de la comparacion</h3>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <thead>
+            <tr style="border-bottom:2px solid var(--border2)">
+              <th style="text-align:left;padding:10px;color:var(--text3);font-size:12px;text-transform:uppercase;width:30%">Especificacion</th>
+              <th style="text-align:center;padding:10px;font-weight:700;width:35%">${compA.name}</th>
+              <th style="text-align:center;padding:10px;font-weight:700;width:35%">${compB.name}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${allKeys.map(k=>{
+              const vA=(compA.specs||{})[k]||'—';
+              const vB=(compB.specs||{})[k]||'—';
+              const diff=vA!==vB;
+              return `<tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:10px;color:var(--text2);font-weight:500">${k}</td>
+                <td style="padding:10px;text-align:center;${diff?'font-weight:700;color:var(--accent)':''}">${vA}</td>
+                <td style="padding:10px;text-align:center;${diff?'font-weight:700;color:var(--accent)':''}">${vB}</td>
+              </tr>`;
+            }).join('')}
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px;color:var(--text2);font-weight:500">Compatibilidad</td>
+              <td style="padding:10px;font-size:12px;color:var(--text2)">${compA.compat}</td>
+              <td style="padding:10px;font-size:12px;color:var(--text2)">${compB.compat}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  return `
+  <section class="container anim-fade" style="padding-top:32px">
+    <div class="section-header">
+      <h2 class="section-title">Comparador de componentes</h2>
+      <p class="section-subtitle">Selecciona dos componentes de la misma categoria para comparar sus especificaciones lado a lado.</p>
+    </div>
+    <div class="card">
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <select class="form-select" onchange="setState({cmpCat:this.value,cmpA:'',cmpB:''})">
+          ${catKeys.map(k=>`<option value="${k}" ${s.cmpCat===k?'selected':''}>${cats[k].name}</option>`).join('')}
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:end">
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Componente A</label>
+          <select class="form-select" onchange="setState({cmpA:this.value})">
+            <option value="">-- Seleccionar --</option>
+            ${byCat.map(c=>`<option value="${c.id}" ${s.cmpA==c.id?'selected':''}>${c.name}</option>`).join('')}
+          </select>
+        </div>
+        <div style="padding-bottom:8px;font-weight:700;color:var(--text3);font-size:18px">vs</div>
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Componente B</label>
+          <select class="form-select" onchange="setState({cmpB:this.value})">
+            <option value="">-- Seleccionar --</option>
+            ${byCat.filter(c=>c.id!=s.cmpA).map(c=>`<option value="${c.id}" ${s.cmpB==c.id?'selected':''}>${c.name}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+    ${tableHTML}
+  </section>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SECCIÓN: CALCULADORA DE PRESUPUESTO
+// ═══════════════════════════════════════════════════════════════
+function renderBudget(){
+  const s=state;
+  const cats=DB.categories;
+  const catOrder=['cpu','motherboard','ram','storage','gpu','psu','case'];
+  const prices={
+    1:175,2:200,3:410,4:330,
+    10:130,11:115,12:140,13:210,
+    20:55,21:70,22:95,23:180,
+    30:110,31:95,32:55,33:35,
+    40:330,41:380,42:550,43:150,
+    50:60,51:110,52:140,53:45,
+    60:105,61:90,62:55,63:115
+  };
+  const byCat=cat=>state.components.filter(c=>c.category===cat);
+
+  let totalPrice=0;
+  let selectedItems=[];
+  catOrder.forEach(cat=>{
+    const id=s.budgetSel[cat];
+    if(id){
+      const comp=state.components.find(c=>c.id==id);
+      if(comp){
+        const price=prices[comp.id]||100;
+        totalPrice+=price;
+        selectedItems.push({name:comp.name,cat:cats[cat].name,price});
+      }
+    }
+  });
+
+  return `
+  <section class="container anim-fade" style="padding-top:32px">
+    <div class="section-header">
+      <h2 class="section-title">Calculadora de presupuesto</h2>
+      <p class="section-subtitle">Selecciona los componentes de tu build para obtener una estimacion del costo total de inversion.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h4 style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px">Selecciona tus componentes</h4>
+        ${catOrder.map(cat=>`
+          <div class="form-group">
+            <label class="form-label">${cats[cat].icon} ${cats[cat].name}</label>
+            <select class="form-select" onchange="state.budgetSel.${cat}=this.value;render()">
+              <option value="">-- Sin seleccionar --</option>
+              ${byCat(cat).map(c=>`<option value="${c.id}" ${s.budgetSel[cat]==c.id?'selected':''}>${c.name} — $${prices[c.id]||100} USD</option>`).join('')}
+            </select>
+          </div>
+        `).join('')}
+      </div>
+      <div>
+        <div class="card" style="position:sticky;top:80px">
+          <h4 style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px">Resumen de presupuesto</h4>
+          ${selectedItems.length>0?`
+            ${selectedItems.map(item=>`
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                <div>
+                  <div style="font-size:14px;font-weight:500">${item.name}</div>
+                  <div style="font-size:12px;color:var(--text3)">${item.cat}</div>
+                </div>
+                <div style="font-weight:700;font-size:15px;color:var(--accent)">$${item.price}</div>
+              </div>
+            `).join('')}
+            <div style="display:flex;justify-content:space-between;padding:16px 0 0;margin-top:8px">
+              <div style="font-size:16px;font-weight:700">Total estimado</div>
+              <div style="font-size:24px;font-weight:800;color:var(--accent)">$${totalPrice} USD</div>
+            </div>
+            <p style="font-size:11px;color:var(--text3);margin-top:8px">* Precios referenciales. Pueden variar segun el vendedor y la disponibilidad.</p>
+          `:`
+            <div style="text-align:center;padding:32px 0;color:var(--text3)">
+              <p style="font-size:14px">Selecciona componentes para ver el presupuesto estimado.</p>
+            </div>
+          `}
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function renderStores(){
+  return `
+  <section class="container anim-fade" style="padding-top:32px">
+    <div class="flex-between section-header">
+      <div>
+        <h2 class="section-title"> Tiendas confiables</h2>
+        <p class="section-subtitle">Puntos de venta seguros y verificados para comprar tus componentes con confianza.</p>
+      </div>
+      ${state.role==='admin'?'<button class="btn btn-primary" onclick="setState({showAddStore:true})">+ Agregar tienda</button>':''}
+    </div>
+    <div class="grid-3">
+      ${state.stores.map(s=>`
+        <div class="card">
+          <div class="flex-between mb-8">
+            <h4 style="font-size:16px;font-weight:600">${s.name}</h4>
+            ${s.verified?'<span class="store-verified">Si Verificada</span>':''}
+          </div>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:8px">📍 ${s.location}</p>
+          <div style="margin-bottom:12px">${stars(s.rating)}</div>
+          <div style="display:flex;gap:8px">
+            <a href="${s.url}" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">Visitar sitio ↗</a>
+            ${state.role==='admin'?`<button class="btn btn-danger btn-sm" onclick="deleteStore(${s.id})">Eliminar</button>`:''}
+          </div>
+        </div>`).join('')}
+    </div>
+  </section>`;
+}
+
+// Admin modals
+function renderAdminModals(){
+  let html='';
+  if(state.showAddComp || state.editComp){
+    const c = state.editComp || {};
+    const isEdit = !!state.editComp;
+    html+=`
+    <div class="modal-overlay" onclick="closeAdminModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h3 class="modal-title">${isEdit?'Editar':'Agregar'} componente</h3>
+          <button class="modal-close" onclick="closeAdminModal()">X</button>
+        </div>
+        <div class="form-group"><label class="form-label">Nombre *</label><input class="form-input" id="f-name" value="${c.name||''}" placeholder="Ej: Intel Core i9-14900K"></div>
+        <div class="form-group"><label class="form-label">Categoría</label>
+          <select class="form-select" id="f-cat">
+            ${Object.entries(DB.categories).map(([k,v])=>`<option value="${k}" ${c.category===k?'selected':''}>${v.icon} ${v.name}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Socket (CPU/Placa)</label><input class="form-input" id="f-socket" value="${c.socket||''}" placeholder="LGA 1700, AM4, AM5..."></div>
+        <div class="form-group"><label class="form-label">Tipo de RAM</label><input class="form-input" id="f-ramtype" value="${c.ramType||''}" placeholder="DDR4, DDR5..."></div>
+        <div class="form-group"><label class="form-label">Potencia/TDP (watts)</label><input class="form-input" type="number" id="f-watt" value="${c.wattage||c.tdp||''}" placeholder="650"></div>
+        <div class="form-group"><label class="form-label">Descripción *</label><textarea class="form-textarea" id="f-desc" placeholder="Descripción detallada...">${c.desc||''}</textarea></div>
+        <div class="form-group"><label class="form-label">Notas de compatibilidad *</label><textarea class="form-textarea" id="f-compat">${c.compat||''}</textarea></div>
+        <div class="form-group"><label class="form-label">Consejo de instalación</label><textarea class="form-textarea" id="f-tip">${c.tip||''}</textarea></div>
+        <div class="form-group"><label class="form-label">URL de imagen</label><input class="form-input" id="f-img" value="${c.img||''}" placeholder="https://..."></div>
+        <div class="form-group"><label class="form-label">ID de video YouTube</label><input class="form-input" id="f-video" value="${c.video||''}" placeholder="ej: dQw4w9WgXcQ"></div>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="saveComp(${isEdit?c.id:'null'})">${isEdit?'Guardar cambios':'Agregar componente'}</button>
+          <button class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  if(state.showAddStore){
+    html+=`
+    <div class="modal-overlay" onclick="setState({showAddStore:false})">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header"><h3 class="modal-title">Agregar tienda</h3><button class="modal-close" onclick="setState({showAddStore:false})">X</button></div>
+        <div class="form-group"><label class="form-label">Nombre *</label><input class="form-input" id="fs-name"></div>
+        <div class="form-group"><label class="form-label">Ubicación *</label><input class="form-input" id="fs-loc"></div>
+        <div class="form-group"><label class="form-label">URL del sitio *</label><input class="form-input" id="fs-url" placeholder="https://..."></div>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="saveStore()">Agregar tienda</button>
+          <button class="btn btn-secondary" onclick="setState({showAddStore:false})">Cancelar</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MAIN RENDER
+// ═══════════════════════════════════════════════════════════════
+function render(){
+  if(!state.user){
+    app.innerHTML = renderLogin();
+    return;
+  }
+  let content='';
+  switch(state.section){
+    case 'home': content=renderHero(); break;
+    case 'components': content=renderComponents(); break;
+    case 'compatibility': content=renderCompatibility(); break;
+    case 'comparator': content=renderComparator(); break;
+    case 'budget': content=renderBudget(); break;
+    case 'simulator': content=renderSimulator(); break;
+    case 'quiz': content=renderQuiz(); break;
+    case 'stores': content=renderStores(); break;
+  }
+  const comp = state.selectedComp ? state.components.find(c=>c.id===state.selectedComp) : null;
+  app.innerHTML = renderHeader() + content +
+    `<footer class="footer">PC Builder Pro — Plataforma educativa interactiva de ensamblaje de computadoras<br><span style="font-size:11px;color:var(--text3)">Proyecto desarrollado como solución al problema de falta de conocimiento en ensamblaje de PCs</span></footer>` +
+    (comp ? renderCompDetail(comp) : '') + renderAdminModals();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════════════
+function navigate(s){ setState({section:s, mobileNav:false}); window.scrollTo(0,0); }
+function doLogin(){
+  const user = state.loginUser || '';
+  const pass = state.loginPass || '';
+  if(state.loginMode==='admin'){
+    if(user==='admin'&&pass==='admin123') setState({user:'Administrador',role:'admin',section:'home'});
+    else setState({loginError:'Credenciales incorrectas. Usa admin / admin123'});
+  } else {
+    if(user.trim()) setState({user:user.trim(),role:'user',section:'home'});
+    else setState({loginError:'Por favor ingresa tu nombre.'});
+  }
+}
+function doLogout(){ setState({user:null,role:null,section:'home',loginUser:'',loginPass:'',loginError:'',loginMode:'user'}); }
+
+function openComp(id){ setState({selectedComp:id}); }
+
+function checkCompat(){
+  const s=state.sel;
+  const comps=state.components;
+  const cpu=comps.find(c=>c.id==s.cpu);
+  const mobo=comps.find(c=>c.id==s.motherboard);
+  const ram=comps.find(c=>c.id==s.ram);
+  const gpu=comps.find(c=>c.id==s.gpu);
+  const psu=comps.find(c=>c.id==s.psu);
+  const errors=[],warnings=[],passes=[];
+
+  if(cpu&&mobo){
+    if(cpu.socket!==mobo.socket) errors.push({title:'Socket incompatible',detail:`El ${cpu.name} usa socket ${cpu.socket} pero la ${mobo.name} tiene socket ${mobo.socket}. Estos NO funcionan juntos. Necesitas cambiar el CPU o la placa base.`});
+    else passes.push({title:'Socket compatible',detail:`Ambos usan socket ${cpu.socket}. El procesador encajará correctamente en la placa base.`});
+  }
+  if(ram&&mobo){
+    if(ram.ramType!==mobo.ramType) errors.push({title:'Tipo de RAM incompatible',detail:`La ${ram.name} es ${ram.ramType} pero la ${mobo.name} solo soporta ${mobo.ramType}. La memoria NO encajará físicamente en el slot porque la muesca está en posición diferente.`});
+    else passes.push({title:'RAM compatible',detail:`Ambos soportan ${ram.ramType}. La memoria encajará correctamente en los slots de la placa.`});
+  }
+  if(gpu&&psu){
+    const gpuW=gpu.tdp||170; const total=gpuW+150; const psuW=psu.wattage||600;
+    if(psuW<total+50) warnings.push({title:'Fuente justa en potencia',detail:`Consumo estimado del sistema: ~${total}W. Tu fuente de ${psuW}W funciona pero con poco margen. Se recomienda ${total+150}W+ para mayor estabilidad y futuras mejoras.`});
+    else passes.push({title:'Potencia suficiente',detail:`La fuente de ${psuW}W cubre el consumo estimado de ${total}W con buen margen de seguridad.`});
+  }
+  if(!s.cpu||!s.motherboard||!s.ram) warnings.push({title:'Selección incompleta',detail:'Selecciona al menos CPU, placa base y RAM para una verificación completa de compatibilidad.'});
+
+  // Calcular datos de potencia
+  let powerData = null;
+  const cpuTdp = cpu ? (parseInt(cpu.specs?.TDP)||65) : 0;
+  const gpuTdp = gpu ? (gpu.tdp||170) : 0;
+  const ramW = ram ? 10 : 0;
+  const otherW = 50; // storage, fans, etc
+  const totalW = cpuTdp + gpuTdp + ramW + otherW;
+  const psuW = psu ? (psu.wattage||600) : totalW + 200;
+  if(cpu || gpu){
+    powerData = {
+      total: totalW, psu: psuW,
+      items: [
+        {label:'CPU', watts:cpuTdp},
+        {label:'GPU', watts:gpuTdp},
+        {label:'RAM', watts:ramW},
+        {label:'Otros', watts:otherW}
+      ]
+    };
+  }
+
+  setState({compatResults:{errors,warnings,passes,powerData}});
+}
+
+function completeStep(i){
+  const done=[...state.simCompleted];
+  if(!done.includes(i)) done.push(i);
+  setState({simCompleted:done, simStep:Math.min(i+1,DB.assemblySteps.length-1)});
+}
+function startChallenge(){
+  const shuffled=[...DB.assemblySteps].sort(()=>Math.random()-0.5);
+  setState({challengeMode:true,challengeItems:shuffled,challengeOrder:[],challengeFeedback:null,challengeScore:0});
+}
+function challengeSelect(step){
+  const next=state.challengeOrder.length+1;
+  const item=DB.assemblySteps.find(s=>s.step===step);
+  if(step===next){
+    const newOrder=[...state.challengeOrder, item];
+    const newItems=state.challengeItems.filter(i=>i.step!==step);
+    setState({challengeOrder:newOrder, challengeItems:newItems, challengeScore:state.challengeScore+10,
+      challengeFeedback:{type:'success',msg:`¡Correcto! "${item.title}" es el paso #${next}.`}});
+  } else {
+    const correctItem=DB.assemblySteps[next-1];
+    setState({challengeFeedback:{type:'error',msg:`Incorrecto. "${item.title}" no es el paso #${next}. Pista: el siguiente paso es sobre "${correctItem.title.toLowerCase()}".`}});
+  }
+  setTimeout(()=>{ if(state.challengeFeedback) setState({challengeFeedback:null}); },4000);
+}
+
+function answerQuiz(i){
+  if(state.quizSelected!==null) return;
+  const q=DB.quiz[state.quizQ];
+  setState({quizSelected:i, quizShowExplain:true, quizAnswers:[...state.quizAnswers,{sel:i,correct:q.correct}]});
+}
+function nextQuiz(){
+  if(state.quizQ<DB.quiz.length-1) setState({quizQ:state.quizQ+1,quizSelected:null,quizShowExplain:false});
+  else setState({quizFinished:true});
+}
+function restartQuiz(){ setState({quizQ:0,quizSelected:null,quizShowExplain:false,quizAnswers:[],quizFinished:false}); }
+
+// Admin actions
+function openAddComp(){ setState({showAddComp:true,editComp:null}); }
+function openEditComp(id){ const c=state.components.find(x=>x.id===id); if(c) setState({editComp:{...c},showAddComp:false}); }
+function closeAdminModal(){ setState({showAddComp:false,editComp:null}); }
+function deleteComp(id){ if(confirm('¿Eliminar este componente?')) setState({components:state.components.filter(c=>c.id!==id)}); }
+function deleteStore(id){ if(confirm('¿Eliminar esta tienda?')) setState({stores:state.stores.filter(s=>s.id!==id)}); }
+
+function saveComp(editId){
+  const name=$('f-name')?.value?.trim();
+  const cat=$('f-cat')?.value;
+  const desc=$('f-desc')?.value?.trim();
+  const compat=$('f-compat')?.value?.trim();
+  if(!name||!desc||!compat){ alert('Completa los campos obligatorios (nombre, descripción, compatibilidad)'); return; }
+  const comp={
+    id:editId||Date.now(), name, category:cat,
+    socket:$('f-socket')?.value?.trim()||'',
+    ramType:$('f-ramtype')?.value?.trim()||'',
+    wattage:parseInt($('f-watt')?.value)||0,
+    tdp:parseInt($('f-watt')?.value)||0,
+    desc, compat,
+    tip:$('f-tip')?.value?.trim()||'',
+    img:$('f-img')?.value?.trim()||'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400&h=300&fit=crop',
+    video:$('f-video')?.value?.trim()||'uUGI3Grx4qU',
+    specs:{}, order:Object.keys(DB.categories).indexOf(cat)+1
+  };
+  if(editId) setState({components:state.components.map(c=>c.id===editId?comp:c),editComp:null,showAddComp:false});
+  else setState({components:[...state.components,comp],showAddComp:false});
+}
+function saveStore(){
+  const name=$('fs-name')?.value?.trim();
+  const loc=$('fs-loc')?.value?.trim();
+  const url=$('fs-url')?.value?.trim();
+  if(!name||!loc||!url){ alert('Completa todos los campos'); return; }
+  setState({stores:[...state.stores,{id:Date.now(),name,location:loc,url,rating:4.0,verified:true}],showAddStore:false});
+}
+
+// Initial state
+state.loginMode='user';state.loginUser='';state.loginPass='';state.loginError='';
+render();
+</script>
+</body>
+</html>
